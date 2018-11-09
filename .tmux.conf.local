@@ -42,7 +42,8 @@ tmux_conf_new_session_prompt=false
 # RGB 24-bit colour support (tmux >= 2.2), possible values are:
 #  - true
 #  - false (default)
-tmux_conf_theme_24b_colour=false
+tmux_conf_theme_24b_colour=true
+#false
 
 # window style
 tmux_conf_theme_window_fg='default'
@@ -65,6 +66,7 @@ tmux_conf_theme_pane_border_style=thin
 # pane borders colours:
 tmux_conf_theme_pane_border='#444444'                   # gray
 tmux_conf_theme_pane_active_border='#00afff'            # light blue
+#tmux_conf_theme_pane_active_border='#00afff'            # light blue
 
 # pane indicator colours
 tmux_conf_theme_pane_indicator='#00afff'                # light blue
@@ -146,14 +148,14 @@ tmux_conf_theme_window_status_last_bg='default'
 tmux_conf_theme_window_status_last_attr='none'
 
 # status left/right sections separators
-tmux_conf_theme_left_separator_main=''
-tmux_conf_theme_left_separator_sub='|'
-tmux_conf_theme_right_separator_main=''
-tmux_conf_theme_right_separator_sub='|'
-#tmux_conf_theme_left_separator_main=''  # /!\ you don't need to install Powerline
-#tmux_conf_theme_left_separator_sub=''   #   you only need fonts patched with
-#tmux_conf_theme_right_separator_main='' #   Powerline symbols or the standalone
-#tmux_conf_theme_right_separator_sub=''  #   PowerlineSymbols.otf font
+#tmux_conf_theme_left_separator_main=''
+#tmux_conf_theme_left_separator_sub='|'
+#tmux_conf_theme_right_separator_main=''
+#tmux_conf_theme_right_separator_sub='|'
+tmux_conf_theme_left_separator_main=''  # /!\ you don't need to install Powerline
+tmux_conf_theme_left_separator_sub=''   #   you only need fonts patched with
+tmux_conf_theme_right_separator_main='' #   Powerline symbols or the standalone
+tmux_conf_theme_right_separator_sub=''  #   PowerlineSymbols.otf font
 
 # status left/right content:
 #   - separate main sections with '|'
@@ -179,7 +181,7 @@ tmux_conf_theme_right_separator_sub='|'
 #     - #{username}
 #     - #{username_ssh}
 tmux_conf_theme_status_left=' ❐ #S | ↑#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} '
-tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
+tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{loadavg}| #{username}#{root} | #{hostname} '
 
 # status left style
 tmux_conf_theme_status_left_fg='#000000,#e4e4e4,#e4e4e4'  # black, white , white
@@ -273,22 +275,54 @@ tmux_conf_copy_to_os_clipboard=false
 # this is the place to override or undo settings
 
 # increase history size
-#set -g history-limit 10000
+set -g history-limit 10000
 
 # start with mouse mode enabled
-#set -g mouse on
-
+set -g mouse off
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
-#set -g status-keys vi
-#set -g mode-keys vi
+set -g status-keys vi
+set -g mode-keys vi
 
 # replace C-b by C-a instead of using both prefixes
 # set -gu prefix2
 # unbind C-a
-# unbind C-b
+unbind C-b
+bind-key C-a last-window
+
+unbind C-b
+set -g prefix C-a
+bind-key a send-prefix
+bind C-c new-window
+
+bind S split-window -v
+# split current window vertically
+bind | split-window -h
+
+unbind space
+unbind C-Space
+unbind BSpace
+bind-key space next-window
+bind-key C-space next-window
+bind-key BSpace previous-window     # select next window
+bind-key C-BSpace previous-window     # select next window
 # set -g prefix C-a
 # bind C-a send-prefix
+
+unbind Tab
+bind Tab select-pane -t :.+
+bind C-Tab select-pane -t :.+
+
+bind '"' list-window
+
+bind-key K confirm-before kill-pane
+bind-key    -T prefix       Escape           copy-mode
+
+
+## m -> notify me on 10s of silence
+#bind-key m set-window-option monitor-activity off \; set-window-option monitor-silence 10
+### M -> notify me on activity again (as usual)
+#bind-key M set-window-option monitor-activity on \; set-window-option monitor-silence 0	  
 
 # move status line to top
 #set -g status-position top
