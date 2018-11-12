@@ -313,10 +313,12 @@ unbind Tab
 bind Tab select-pane -t :.+
 bind C-Tab select-pane -t :.+
 
-bind '"' list-window
+bind '"' choose-tree -w
 
 bind-key K confirm-before kill-pane
 bind-key    -T prefix       Escape           copy-mode
+
+bind-key    -T prefix       A                 command-prompt -I "#W" "rename-window '%%'"
 
 
 ## m -> notify me on 10s of silence
