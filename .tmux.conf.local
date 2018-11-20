@@ -304,8 +304,10 @@ unbind C-Space
 unbind BSpace
 bind-key space next-window
 bind-key C-space next-window
+bind-key    -T root F8 next-window
 bind-key BSpace previous-window     # select next window
 bind-key C-BSpace previous-window     # select next window
+bind-key    -T root F7 previous-window     # select next window
 # set -g prefix C-a
 # bind C-a send-prefix
 
